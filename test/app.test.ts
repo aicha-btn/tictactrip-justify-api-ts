@@ -3,8 +3,13 @@ import { createServer, type Server } from "node:http";
 import type { AddressInfo } from "node:net";
 import { after, before, beforeEach, describe, it } from "node:test";
 
-import { createApp, type AppDependencies } from "../src/app.js";
+import {
+  createApp,
+  createDefaultDependencies,
+  type AppDependencies,
+} from "../src/app.js";
 import { InMemoryTokenStore } from "../src/auth/token-store.js";
+import { MAX_BODY_SIZE_BYTES } from "../src/config.js";
 import { DailyWordLimiter } from "../src/rate-limit/daily-word-limiter.js";
 
 describe("HTTP API", () => {
@@ -66,6 +71,14 @@ describe("HTTP API", () => {
     assert.deepEqual(await response.json(), { status: "ok" });
   });
 
+  it("creates default production dependencies", () => {
+    const defaults = createDefaultDependencies();
+
+    assert.equal(defaults.lineWidth, 80);
+    assert.equal(defaults.rateLimiter.dailyLimit, 80_000);
+    assert.equal(defaults.tokenStore.exists("unknown-token"), false);
+  });
+
   it("returns 404 for an unknown route", async () => {
     const response = await fetch(`${baseUrl}/unknown`);
 
@@ -82,6 +95,14 @@ describe("HTTP API", () => {
     const response = await fetch(`${baseUrl}/api/token`, {
       body: JSON.stringify({ email: "foo@bar.com" }),
       headers: { "content-type": "text/plain" },
+      method: "POST",
+    });
+
+    assert.equal(response.status, 415);
+  });
+
+  it("rejects token requests without a content type", async () => {
+    const response = await fetch(`${baseUrl}/api/token`, {
       method: "POST",
     });
 
@@ -106,6 +127,16 @@ describe("HTTP API", () => {
     });
 
     assert.equal(response.status, 400);
+  });
+
+  it("returns 413 when the request body is too large", async () => {
+    const response = await fetch(`${baseUrl}/api/token`, {
+      body: Buffer.alloc(MAX_BODY_SIZE_BYTES + 1, "a"),
+      headers: { "content-type": "application/json" },
+      method: "POST",
+    });
+
+    assert.equal(response.status, 413);
   });
 
   it("justifies text with a valid bearer token", async () => {
@@ -185,6 +216,26 @@ describe("HTTP API", () => {
     assert.equal(payload.error, "Daily word limit exceeded.");
     assert.equal(payload.details.limit, 5);
     assert.equal(payload.details.remainingWords, 5);
+  });
+
+  it("returns 500 when an unexpected server error occurs", async () => {
+    dependencies = {
+      lineWidth: 0,
+      rateLimiter: new DailyWordLimiter(5),
+      tokenStore: new InMemoryTokenStore(),
+    };
+    const token = await createToken(baseUrl);
+
+    const response = await fetch(`${baseUrl}/api/justify`, {
+      body: "hello",
+      headers: {
+        authorization: `Bearer ${token}`,
+        "content-type": "text/plain",
+      },
+      method: "POST",
+    });
+
+    assert.equal(response.status, 500);
   });
 });
 

@@ -14,14 +14,19 @@ export function readBody(
 ): Promise<string> {
   return new Promise((resolve, reject) => {
     const chunks: Buffer[] = [];
+    let isTooLarge = false;
     let receivedBytes = 0;
 
     request.on("data", (chunk: Buffer) => {
+      if (isTooLarge) {
+        return;
+      }
+
       receivedBytes += chunk.length;
 
       if (receivedBytes > maxBytes) {
+        isTooLarge = true;
         reject(new BodyTooLargeError());
-        request.destroy();
         return;
       }
 
@@ -29,6 +34,10 @@ export function readBody(
     });
 
     request.on("end", () => {
+      if (isTooLarge) {
+        return;
+      }
+
       resolve(Buffer.concat(chunks).toString("utf8"));
     });
 
