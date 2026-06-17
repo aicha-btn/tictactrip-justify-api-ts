@@ -1,6 +1,7 @@
 node_modules/
 dist/
 coverage/
+.runtime/
 .env
 .DS_Store
 npm-debug.log*
