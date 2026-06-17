@@ -71,6 +71,25 @@ describe("HTTP API", () => {
     assert.deepEqual(await response.json(), { status: "ok" });
   });
 
+  it("returns API information on the root route", async () => {
+    const response = await fetch(baseUrl);
+    const payload = (await response.json()) as {
+      dailyWordLimit: number;
+      endpoints: { justify: string; token: string };
+      lineWidth: number;
+      name: string;
+      status: string;
+    };
+
+    assert.equal(response.status, 200);
+    assert.equal(payload.name, "Tictactrip Justify API");
+    assert.equal(payload.status, "ok");
+    assert.equal(payload.endpoints.token, "POST /api/token");
+    assert.equal(payload.endpoints.justify, "POST /api/justify");
+    assert.equal(payload.lineWidth, 10);
+    assert.equal(payload.dailyWordLimit, 5);
+  });
+
   it("creates default production dependencies", () => {
     const defaults = createDefaultDependencies();
 

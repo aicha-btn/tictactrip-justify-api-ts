@@ -131,6 +131,12 @@ Verifier la sante de l'API :
 curl http://localhost:3000/health
 ```
 
+Ouvrir la racine de l'API :
+
+```bash
+curl http://localhost:3000/
+```
+
 ## Tests et qualite
 
 Lancer les tests :

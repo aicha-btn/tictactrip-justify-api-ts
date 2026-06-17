@@ -47,6 +47,22 @@ async function routeRequest(
 ): Promise<void> {
   const path = getPath(request);
 
+  if (request.method === "GET" && path === "/") {
+    sendJson(response, 200, {
+      name: "Tictactrip Justify API",
+      status: "ok",
+      description: "REST API that justifies text to 80 characters.",
+      endpoints: {
+        health: "GET /health",
+        token: "POST /api/token",
+        justify: "POST /api/justify",
+      },
+      lineWidth: dependencies.lineWidth,
+      dailyWordLimit: dependencies.rateLimiter.dailyLimit,
+    });
+    return;
+  }
+
   if (request.method === "GET" && path === "/health") {
     sendJson(response, 200, { status: "ok" });
     return;

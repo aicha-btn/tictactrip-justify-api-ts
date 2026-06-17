@@ -6,6 +6,27 @@ Base URL locale :
 http://localhost:3000
 ```
 
+## GET /
+
+Retourne les informations principales de l'API.
+
+### Reponse 200
+
+```json
+{
+  "name": "Tictactrip Justify API",
+  "status": "ok",
+  "description": "REST API that justifies text to 80 characters.",
+  "endpoints": {
+    "health": "GET /health",
+    "token": "POST /api/token",
+    "justify": "POST /api/justify"
+  },
+  "lineWidth": 80,
+  "dailyWordLimit": 80000
+}
+```
+
 ## POST /api/token
 
 Cree ou retrouve le token associe a un email.
