@@ -121,7 +121,7 @@ async function handleJustifyRequest(
 
   if (!rateLimit.accepted) {
     sendError(response, 402, "Daily word limit exceeded.", {
-      limit: 80_000,
+      limit: dependencies.rateLimiter.dailyLimit,
       remainingWords: rateLimit.remainingWords,
       resetDate: rateLimit.resetDate,
     });

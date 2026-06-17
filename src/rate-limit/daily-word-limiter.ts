@@ -15,7 +15,7 @@ interface TokenUsage {
 export class DailyWordLimiter {
   private readonly usageByToken = new Map<string, TokenUsage>();
 
-  constructor(private readonly dailyLimit = DAILY_WORD_LIMIT) {}
+  constructor(readonly dailyLimit = DAILY_WORD_LIMIT) {}
 
   consume(token: string, words: number, now = new Date()): RateLimitResult {
     const resetDate = toUtcDateKey(now);
