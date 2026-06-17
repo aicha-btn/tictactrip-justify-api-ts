@@ -8,16 +8,21 @@ Render héberge des services web Node.js et peut se connecter à GitHub.
 
 ### Étape 1 : pousser le code sur GitHub
 
+Le dépôt est deja configure avec ce remote :
+
+```text
+https://github.com/aicha-btn/tictactrip-justify-api-ts.git
+```
+
 Dans le terminal :
 
 ```bash
 cd "/Users/aicha/API - Tictactrip"
-git init
-git add .
-git commit -m "chore: initialise justify API"
+git status
+git push origin main
 ```
 
-Crée ensuite un repository sur GitHub, puis suis les commandes affichées par GitHub, par exemple :
+Si tu repars de zero sur un autre ordinateur, cree un repository sur GitHub, puis suis les commandes affichees par GitHub, par exemple :
 
 ```bash
 git branch -M main

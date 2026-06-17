@@ -10,7 +10,7 @@
   "scripts": {
     "build": "tsc -p tsconfig.json",
     "clean": "rm -rf dist coverage",
-    "coverage": "npm run build && node --test --experimental-test-coverage dist/test/*.test.js",
+    "coverage": "npm run build && node --test --experimental-test-coverage --test-coverage-lines=95 --test-coverage-branches=90 --test-coverage-functions=95 dist/test/*.test.js",
     "dev": "npm run build -- --watch",
     "lint": "npm run typecheck",
     "start": "node dist/src/main.js",

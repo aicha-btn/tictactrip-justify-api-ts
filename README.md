@@ -143,6 +143,12 @@ Lancer le coverage :
 npm run coverage
 ```
 
+Le coverage impose des seuils minimaux :
+
+- lignes : 95% ;
+- branches : 90% ;
+- fonctions : 95%.
+
 Tout verifier en une commande :
 
 ```bash

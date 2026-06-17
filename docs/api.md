@@ -37,6 +37,7 @@ Body :
 ### Erreurs
 
 - `400` si l'email est absent ou invalide.
+- `413` si le body depasse la taille maximale acceptee.
 - `405` si la methode n'est pas `POST`.
 - `415` si le `Content-Type` n'est pas `application/json`.
 
@@ -77,6 +78,7 @@ Texte justifie.
 
 - `401` si le token est absent ou invalide.
 - `402` si le token depasse 80 000 mots sur la journee.
+- `413` si le body depasse la taille maximale acceptee.
 - `405` si la methode n'est pas `POST`.
 - `415` si le `Content-Type` n'est pas `text/plain`.
 
