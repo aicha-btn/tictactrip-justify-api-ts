@@ -1,5 +1,7 @@
 # Tictactrip Justify API
 
+[![CI](https://github.com/aicha-btn/tictactrip-justify-api-ts/actions/workflows/ci.yml/badge.svg)](https://github.com/aicha-btn/tictactrip-justify-api-ts/actions/workflows/ci.yml)
+
 API REST Node.js + TypeScript qui justifie un texte sur des lignes de 80 caracteres.
 
 Le projet respecte les contraintes du test technique :
