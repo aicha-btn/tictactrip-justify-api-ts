@@ -2,47 +2,47 @@
 
 [![CI](https://github.com/aicha-btn/tictactrip-justify-api-ts/actions/workflows/ci.yml/badge.svg)](https://github.com/aicha-btn/tictactrip-justify-api-ts/actions/workflows/ci.yml)
 
-API REST développée en **Node.js** et **TypeScript** pour justifier un texte sur des lignes de **80 caractères**.
+A **Node.js** and **TypeScript** REST API that justifies text into lines of **80 characters**.
 
-Le projet a été réalisé dans le cadre du test technique backend TicTacTrip.
+The project was built for the TicTacTrip backend technical assessment.
 
-## API publique
+## Public API
 
-L'API est déployée sur Render :
+The API is deployed on Render:
 
 ```text
 https://tictactrip-justify-api-i2w6.onrender.com
 ```
 
-Vérifier que l'API est en ligne :
+Check that the API is online:
 
 ```bash
 curl https://tictactrip-justify-api-i2w6.onrender.com/health
 ```
 
-Réponse attendue :
+Expected response:
 
 ```json
 {"status":"ok"}
 ```
 
-## Contraintes respectées
+## Requirements Covered
 
-* `POST /api/token` crée un token à partir d'un email.
-* `POST /api/justify` retourne un texte justifié.
-* Le body de `/api/justify` doit être envoyé en `text/plain`.
-* Chaque ligne justifiée fait **80 caractères**, sauf la dernière ligne d'un paragraphe.
-* L'endpoint `/api/justify` est protégé par un token Bearer.
-* Le rate limit est fixé à **80 000 mots par token et par jour**.
-* Le dépassement du quota renvoie `402 Payment Required`.
-* La justification est codée sans bibliothèque externe.
-* Le projet est déployé sur une URL publique.
-* Le code est disponible sur GitHub.
-* Le projet inclut des tests automatisés, du coverage, une CI GitHub Actions, un Dockerfile et une configuration Render.
+- `POST /api/token` creates a token from an email address.
+- `POST /api/justify` returns justified text.
+- The `/api/justify` body must be sent as `text/plain`.
+- Each justified line is **80 characters** long, except the last line of a paragraph.
+- The `/api/justify` endpoint is protected by a Bearer token.
+- The rate limit is **80,000 words per token per day**.
+- Exceeding the quota returns `402 Payment Required`.
+- The justification algorithm is implemented without an external library.
+- The project is deployed to a public URL.
+- The code is available on GitHub.
+- The project includes automated tests, coverage, GitHub Actions CI, a Dockerfile, and Render configuration.
 
-## Fonctionnement général
+## How It Works
 
-Le fonctionnement de l'API est le suivant :
+The API flow is:
 
 ```mermaid
 sequenceDiagram
@@ -53,33 +53,33 @@ sequenceDiagram
   API-->>Client: {"token":"..."}
 
   Client->>API: POST /api/justify + Bearer token + text/plain
-  API-->>Client: Texte justifié sur 80 caractères
+  API-->>Client: Text justified to 80-character lines
 ```
 
 ## Endpoints
 
-| Méthode | Endpoint       | Description                                  |
-| ------- | -------------- | -------------------------------------------- |
-| `GET`   | `/`            | Retourne les informations générales de l'API |
-| `GET`   | `/health`      | Vérifie que l'API est en ligne               |
-| `POST`  | `/api/token`   | Génère un token à partir d'un email          |
-| `POST`  | `/api/justify` | Justifie un texte sur 80 caractères          |
+| Method | Endpoint       | Description |
+| --- | --- | --- |
+| `GET` | `/` | Returns general API information |
+| `GET` | `/health` | Checks that the API is online |
+| `POST` | `/api/token` | Generates a token from an email address |
+| `POST` | `/api/justify` | Justifies text into 80-character lines |
 
-## Utilisation en production
+## Production Usage
 
-### 1. Vérifier la santé de l'API
+### 1. Check API Health
 
 ```bash
 curl https://tictactrip-justify-api-i2w6.onrender.com/health
 ```
 
-Réponse attendue :
+Expected response:
 
 ```json
 {"status":"ok"}
 ```
 
-### 2. Générer un token
+### 2. Generate a Token
 
 ```bash
 curl -i -X POST https://tictactrip-justify-api-i2w6.onrender.com/api/token \
@@ -87,28 +87,28 @@ curl -i -X POST https://tictactrip-justify-api-i2w6.onrender.com/api/token \
   -d '{"email":"foo@bar.com"}'
 ```
 
-Exemple de réponse :
+Example response:
 
 ```json
 {"token":"11111111-2222-3333-4444-555555555555"}
 ```
 
-### 3. Justifier un texte
+### 3. Justify Text
 
-Remplacer `TON_TOKEN_ICI` par le token reçu à l'étape précédente.
+Replace `YOUR_TOKEN_HERE` with the token received in the previous step.
 
 ```bash
 curl -X POST https://tictactrip-justify-api-i2w6.onrender.com/api/justify \
-  -H "Authorization: Bearer TON_TOKEN_ICI" \
+  -H "Authorization: Bearer YOUR_TOKEN_HERE" \
   -H "Content-Type: text/plain" \
-  --data-binary "Longtemps, je me suis couché de bonne heure."
+  --data-binary "This is a sample sentence that will be justified by the API."
 ```
 
-## Vérifier la largeur des lignes
+## Check Line Width
 
-Pour vérifier que les lignes retournées font bien 80 caractères, il est possible d'enregistrer la réponse dans un fichier puis d'afficher la longueur de chaque ligne.
+To verify that returned lines are exactly 80 characters wide, save the response to a file and print each line length.
 
-Créer un fichier d'exemple :
+Create a sample file:
 
 ```bash
 cat > sample.txt <<'EOF'
@@ -116,22 +116,22 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer euismod, nisl s
 EOF
 ```
 
-Appeler l'API :
+Call the API:
 
 ```bash
 curl -s -X POST https://tictactrip-justify-api-i2w6.onrender.com/api/justify \
-  -H "Authorization: Bearer TON_TOKEN_ICI" \
+  -H "Authorization: Bearer YOUR_TOKEN_HERE" \
   -H "Content-Type: text/plain" \
   --data-binary @sample.txt > justified.txt
 ```
 
-Afficher la longueur de chaque ligne :
+Print the length of each line:
 
 ```bash
 awk '{ printf "%3d |%s|\n", length($0), $0 }' justified.txt
 ```
 
-Exemple de résultat :
+Example output:
 
 ```text
  80 |Lorem  ipsum  dolor sit amet, consectetur adipiscing elit. Integer euismod, nisl|
@@ -140,44 +140,44 @@ Exemple de résultat :
  27 |sed porta mi lorem in arcu.|
 ```
 
-La dernière ligne peut faire moins de 80 caractères, car elle n'est pas complétée artificiellement.
+The last line can be shorter than 80 characters because it is not padded artificially.
 
-## Authentification
+## Authentication
 
-L'endpoint `/api/justify` nécessite un token Bearer.
+The `/api/justify` endpoint requires a Bearer token.
 
-Exemple :
+Example:
 
 ```bash
 curl -X POST https://tictactrip-justify-api-i2w6.onrender.com/api/justify \
-  -H "Authorization: Bearer TON_TOKEN_ICI" \
+  -H "Authorization: Bearer YOUR_TOKEN_HERE" \
   -H "Content-Type: text/plain" \
-  --data-binary "Texte à justifier."
+  --data-binary "Text to justify."
 ```
 
-Sans token valide, l'API renvoie :
+Without a valid token, the API returns:
 
 ```http
 401 Unauthorized
 ```
 
-Exemple de réponse :
+Example response:
 
 ```json
 {"error":"A valid Bearer token is required."}
 ```
 
-## Rate limit
+## Rate Limit
 
-Chaque token est limité à **80 000 mots par jour** sur l'endpoint `/api/justify`.
+Each token is limited to **80,000 words per day** on the `/api/justify` endpoint.
 
-Si le quota est dépassé, l'API renvoie :
+When the quota is exceeded, the API returns:
 
 ```http
 402 Payment Required
 ```
 
-Exemple de réponse :
+Example response:
 
 ```json
 {
@@ -190,52 +190,52 @@ Exemple de réponse :
 }
 ```
 
-## Installation locale
+## Local Installation
 
-Cloner le projet :
+Clone the project:
 
 ```bash
 git clone https://github.com/aicha-btn/tictactrip-justify-api-ts.git
 cd tictactrip-justify-api-ts
 ```
 
-Installer les dépendances :
+Install dependencies:
 
 ```bash
 npm ci
 ```
 
-`npm ci` installe exactement les versions listées dans `package-lock.json`.
+`npm ci` installs the exact versions listed in `package-lock.json`.
 
-## Lancer l'API en local
+## Run the API Locally
 
-Compiler le TypeScript :
+Compile TypeScript:
 
 ```bash
 npm run build
 ```
 
-Lancer l'API :
+Start the API:
 
 ```bash
 npm start
 ```
 
-L'API écoute alors sur :
+The API then listens on:
 
 ```text
 http://localhost:3000
 ```
 
-Vérifier que l'API fonctionne :
+Check that the API works:
 
 ```bash
 curl http://localhost:3000/health
 ```
 
-## Utilisation locale
+## Local Usage
 
-Demander un token :
+Request a token:
 
 ```bash
 curl -X POST http://localhost:3000/api/token \
@@ -243,66 +243,66 @@ curl -X POST http://localhost:3000/api/token \
   -d '{"email":"foo@bar.com"}'
 ```
 
-Justifier un texte :
+Justify text:
 
 ```bash
 curl -X POST http://localhost:3000/api/justify \
-  -H "Authorization: Bearer TON_TOKEN_ICI" \
+  -H "Authorization: Bearer YOUR_TOKEN_HERE" \
   -H "Content-Type: text/plain" \
-  --data-binary "Longtemps, je me suis couché de bonne heure."
+  --data-binary "This is a sample sentence that will be justified by the API."
 ```
 
-Ouvrir la racine de l'API :
+Open the API root:
 
 ```bash
 curl http://localhost:3000/
 ```
 
-## Tests et qualité
+## Tests and Quality
 
-Lancer les tests :
+Run tests:
 
 ```bash
 npm test
 ```
 
-Lancer le coverage :
+Run coverage:
 
 ```bash
 npm run coverage
 ```
 
-Tout vérifier en une commande :
+Check everything with one command:
 
 ```bash
 npm run verify
 ```
 
-La commande `verify` lance :
+The `verify` command runs:
 
-* le contrôle TypeScript ;
-* le build ;
-* les tests automatisés ;
-* le rapport de coverage.
+- TypeScript checks;
+- the production build;
+- automated tests;
+- the coverage report.
 
-Le projet impose des seuils minimums de coverage :
+The project enforces minimum coverage thresholds:
 
-* lignes : 95% ;
-* branches : 90% ;
-* fonctions : 95%.
+- lines: 95%;
+- branches: 90%;
+- functions: 95%.
 
-## Déploiement
+## Deployment
 
-Le projet est déployé sur Render.
+The project is deployed on Render.
 
-Commandes utilisées par l'hébergeur :
+Commands used by the host:
 
 ```bash
 npm ci && npm run build
 npm start
 ```
 
-Configuration recommandée :
+Recommended configuration:
 
 ```text
 Runtime: Node
@@ -311,52 +311,52 @@ Start Command: npm start
 Health Check Path: /health
 ```
 
-Variable d'environnement recommandée :
+Recommended environment variable:
 
 ```text
 NODE_VERSION=20.11.1
 ```
 
-Un `render.yaml` est également fourni pour faciliter le déploiement.
+A `render.yaml` file is also provided to simplify deployment.
 
-## Structure du projet
+## Project Structure
 
 ```text
 src/
-  app.ts                         Routes HTTP principales
-  auth/token-store.ts            Création et vérification des tokens
-  justify/justify-text.ts        Algorithme de justification sans dépendance externe
+  app.ts                         Main HTTP routes
+  auth/token-store.ts            Token creation and validation
+  justify/justify-text.ts        Dependency-free justification algorithm
   rate-limit/daily-word-limiter.ts
-  http/                          Helpers HTTP
+  http/                          HTTP helpers
 
-test/                            Tests automatisés
-docs/api.md                      Documentation API détaillée
-Dockerfile                       Image Docker du projet
-render.yaml                      Configuration Render
+test/                            Automated tests
+docs/api.md                      Detailed API documentation
+Dockerfile                       Project Docker image
+render.yaml                      Render configuration
 ```
 
-## Notes techniques
+## Technical Notes
 
-* Les tokens sont stockés en mémoire.
-* Les compteurs de mots sont stockés en mémoire.
-* Le compteur quotidien se base sur la date UTC.
-* Les mots plus longs que 80 caractères sont découpés pour respecter la largeur demandée.
-* La justification du texte est faite sans bibliothèque externe.
-* Pour une production à très fort trafic, le stockage en mémoire pourrait être remplacé par Redis ou une base de données.
-* Ce choix est volontairement simple pour un test technique : il garde le code lisible et concentré sur les contraintes demandées.
+- Tokens are stored in memory.
+- Word counters are stored in memory.
+- The daily counter is based on the UTC date.
+- Words longer than 80 characters are split to respect the requested width.
+- Text justification is implemented without an external library.
+- For high-traffic production use, the in-memory storage could be replaced by Redis or a database.
+- This simple choice is intentional for a technical assessment: it keeps the code readable and focused on the requested constraints.
 
-## Stack technique
+## Technical Stack
 
-* Node.js
-* TypeScript
-* API REST
-* Tests automatisés
-* Coverage
-* GitHub Actions
-* Render
-* Docker
+- Node.js
+- TypeScript
+- REST API
+- Automated tests
+- Coverage
+- GitHub Actions
+- Render
+- Docker
 
-## Commandes utiles
+## Useful Commands
 
 ```bash
 npm ci

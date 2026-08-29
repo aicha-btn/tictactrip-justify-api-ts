@@ -1,6 +1,6 @@
-# Documentation API
+# API Documentation
 
-Base URL locale :
+Local base URL:
 
 ```text
 http://localhost:3000
@@ -8,9 +8,9 @@ http://localhost:3000
 
 ## GET /
 
-Retourne les informations principales de l'API.
+Returns the main API information.
 
-### Reponse 200
+### 200 Response
 
 ```json
 {
@@ -29,17 +29,17 @@ Retourne les informations principales de l'API.
 
 ## POST /api/token
 
-Cree ou retrouve le token associe a un email.
+Creates or returns the token associated with an email address.
 
-### Requete
+### Request
 
-Headers :
+Headers:
 
 ```text
 Content-Type: application/json
 ```
 
-Body :
+Body:
 
 ```json
 {
@@ -47,7 +47,7 @@ Body :
 }
 ```
 
-### Reponse 200
+### 200 Response
 
 ```json
 {
@@ -55,55 +55,55 @@ Body :
 }
 ```
 
-### Erreurs
+### Errors
 
-- `400` si l'email est absent ou invalide.
-- `413` si le body depasse la taille maximale acceptee.
-- `405` si la methode n'est pas `POST`.
-- `415` si le `Content-Type` n'est pas `application/json`.
+- `400` when the email is missing or invalid.
+- `413` when the body exceeds the accepted maximum size.
+- `405` when the method is not `POST`.
+- `415` when `Content-Type` is not `application/json`.
 
 ## POST /api/justify
 
-Justifie un texte en lignes de 80 caracteres.
+Justifies text into 80-character lines.
 
-### Requete
+### Request
 
-Headers :
+Headers:
 
 ```text
 Authorization: Bearer <token>
 Content-Type: text/plain
 ```
 
-Body :
+Body:
 
 ```text
-Un texte libre a justifier.
+Free text to justify.
 ```
 
-### Reponse 200
+### 200 Response
 
-Headers :
+Headers:
 
 ```text
 Content-Type: text/plain; charset=utf-8
 ```
 
-Body :
+Body:
 
 ```text
-Texte justifie.
+Justified text.
 ```
 
-### Erreurs
+### Errors
 
-- `401` si le token est absent ou invalide.
-- `402` si le token depasse 80 000 mots sur la journee.
-- `413` si le body depasse la taille maximale acceptee.
-- `405` si la methode n'est pas `POST`.
-- `415` si le `Content-Type` n'est pas `text/plain`.
+- `401` when the token is missing or invalid.
+- `402` when the token exceeds 80,000 words for the day.
+- `413` when the body exceeds the accepted maximum size.
+- `405` when the method is not `POST`.
+- `415` when `Content-Type` is not `text/plain`.
 
-Exemple de reponse `402` :
+Example `402` response:
 
 ```json
 {
@@ -118,9 +118,9 @@ Exemple de reponse `402` :
 
 ## GET /health
 
-Endpoint technique pour verifier que le serveur repond.
+Technical endpoint used to verify that the server is responding.
 
-### Reponse 200
+### 200 Response
 
 ```json
 {

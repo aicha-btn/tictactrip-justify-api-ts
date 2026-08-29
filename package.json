@@ -1,7 +1,7 @@
 {
   "name": "tictactrip-justify-api",
   "version": "1.0.0",
-  "description": "API REST TypeScript qui justifie du texte sur 80 caracteres avec authentification par token.",
+  "description": "TypeScript REST API that justifies text to 80 characters with token authentication.",
   "type": "module",
   "private": true,
   "engines": {
